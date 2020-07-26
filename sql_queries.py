@@ -17,7 +17,7 @@ time_table_drop = "DROP TABLE IF EXISTS time"
 
 # CREATE TABLES
 
-staging_events_table_create= ("""
+staging_events_table_create = ("""
 CREATE TEMP TABLE  stg_events
 (
     artist          VARCHAR (255),
@@ -146,14 +146,15 @@ songplay_table_insert = ("""
 INSERT INTO songplays
 SELECT
     e.start_time,
-    user_id,
-    level           VARCHAR (255),
-    song_id         VARCHAR (255)   REFERENCES songs(id),
-    artist_id       VARCHAR (255)   REFERENCES artists(id) DISTKEY,
-    session_id      INTEGER         NOT NULL,
-    location        VARCHAR (255),
-    user_agent      VARCHAR
-FROM stg_events e
+    e.userId as user_id,
+    e.level,
+    s.song_id,
+    s.artist_id,
+    e.sessionId as session_id,
+    e.location,
+    e.userAgent as user_agent
+FROM stg_events e LEFT JOIN songs s ON (e.song = s.title AND e.length = s.duration)
+WHERE e.page = 'NextSong'
 """)
 
 user_table_insert = ("""
@@ -208,7 +209,7 @@ FROM (SELECT DISTINCT
 
 # QUERY LISTS
 
-create_table_queries = [staging_events_table_create, staging_songs_table_create, songplay_table_create, user_table_create, song_table_create, artist_table_create, time_table_create]
+create_table_queries = [staging_events_table_create, staging_songs_table_create, time_table_create, artist_table_create, song_table_create, user_table_create, songplay_table_create]
 drop_table_queries = [staging_events_table_drop, staging_songs_table_drop, songplay_table_drop, user_table_drop, song_table_drop, artist_table_drop, time_table_drop]
 copy_table_queries = [staging_events_copy, staging_songs_copy]
-insert_table_queries = [songplay_table_insert, user_table_insert, song_table_insert, artist_table_insert, time_table_insert]
+insert_table_queries = [time_table_insert, artist_table_insert, song_table_insert, user_table_insert, songplay_table_insert]
