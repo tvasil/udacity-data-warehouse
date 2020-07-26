@@ -69,8 +69,7 @@ CREATE TABLE IF NOT EXISTS songplays
     session_id      INTEGER         NOT NULL,
     location        VARCHAR (255),
     user_agent      VARCHAR
-)
-DISTSTYLE AUTO;
+);
 """)
 
 user_table_create = ("""
