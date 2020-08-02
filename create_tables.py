@@ -4,12 +4,14 @@ from sql_queries import create_table_queries, drop_table_queries
 
 
 def drop_tables(cur, conn):
+    """Executes SQL queries from sql_queries to drop tables"""
     for query in drop_table_queries:
         cur.execute(query)
         conn.commit()
 
 
 def create_tables(cur, conn):
+    """Executes SQL queries from sql_queries to create needed tables"""
     for query in create_table_queries:
         cur.execute(query)
         conn.commit()
