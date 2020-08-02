@@ -5,6 +5,12 @@ import configparser
 config = configparser.ConfigParser()
 config.read('dwh.cfg')
 
+ARN = config.get('IAM_ROLE', 'ARN')
+LOG_DATA = config.get('S3', 'LOG_DATA')
+LOG_JSONPATH = config.get('S3', 'LOG_JSONPATH')
+# SONG_DATA = config.get('S3', 'SONG_DATA')
+# SONGS_JSONPATH = config.get('S3', 'SONGS_JSONPATH')
+
 # DROP TABLES
 
 staging_events_table_drop = "DROP TABLE IF EXISTS stg_events"
@@ -18,7 +24,7 @@ time_table_drop = "DROP TABLE IF EXISTS time"
 # CREATE TABLES
 
 staging_events_table_create = ("""
-CREATE TEMP TABLE  stg_events
+CREATE TABLE IF NOT EXISTS stg_events
 (
     artist          VARCHAR (255),
     auth            VARCHAR (255),
@@ -26,34 +32,34 @@ CREATE TEMP TABLE  stg_events
     gender          CHAR(1),
     itemInSession   INTEGER,
     lastName        VARCHAR (255),
-    length          DECIMAL         NOT NULL,
+    length          DECIMAL,
     level           VARCHAR (20),
     location        VARCHAR (255),
     method          VARCHAR (10),
     page            VARCHAR (255),
     registration    DECIMAL,
-    sessionId       INTEGER         NOT NULL,
+    sessionId       INTEGER,
     song            VARCHAR (255),
     status          INTEGER,
-    ts              DECIMAL         NOT NULL,
+    ts              DECIMAL,
     userAgent       VARCHAR,
-    userId          INTEGER         NOT NULL
+    userId          INTEGER
 );
 """)
 
 staging_songs_table_create = ("""
-CREATE TEMP TABLE stg_songs
+CREATE TABLE IF NOT EXISTS stg_songs
 (
     num_songs       INTEGER,
     artist_id       VARCHAR (255),
     artist_latitude DECIMAL,
     artist_longitude DECIMAL,
     artist_location VARCHAR (255),
-    artist_name     VARCHAR (255)   NOT NULL,
-    song_id         VARCHAR (255)   NOT NULL,
-    title           VARCHAR (255)   NOT NULL,
-    duration        DECIMAL         NOT NULL,
-    year            SMALLINT        NOT NULL
+    artist_name     VARCHAR (1024),
+    song_id         VARCHAR (255),
+    title           VARCHAR (1024),
+    duration        DECIMAL,
+    year            SMALLINT
 );
 """)
 
@@ -125,19 +131,25 @@ DISTSTYLE AUTO;
 # STAGING TABLES
 
 staging_events_copy = ("""
-COPY stg_events FROM {}
+COPY stg_events
+FROM {}
 CREDENTIALS 'aws_iam_role={}'
-FORMAT AS json {} REGION 'us-west-2';
+FORMAT AS json {}
+REGION 'us-west-2';
 """).format(config.get("S3", "LOG_DATA"),
             config.get("IAM_ROLE", "ARN"),
-            config.get("S3", "LOG_JSONPATH"))
+            config.get("S3", "LOG_JSONPATH")
+            )
 
 staging_songs_copy = ("""
-COPY stg_songs FROM {}
+COPY stg_songs
+FROM {}
 CREDENTIALS 'aws_iam_role={}'
-json 'auto' REGION 'us-west-2';
+FORMAT AS JSON 'auto'
+REGION 'us-west-2';
 """).format(config.get("S3", "SONG_DATA"),
-            config.get("IAM_ROLE", "ARN"))
+            config.get("IAM_ROLE", "ARN")
+            )
 
 # FINAL TABLES
 
