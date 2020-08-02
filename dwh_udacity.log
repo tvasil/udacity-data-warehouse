@@ -1,0 +1,126 @@
+2020-08-02 18:46:33,052 - __main__ - INFO - -------------------------------
+2020-08-02 18:46:33,052 - __main__ - INFO - Dropping table stg_events.
+
+2020-08-02 18:46:33,852 - __main__ - INFO - Finished dropping table stg_events.
+
+
+2020-08-02 18:46:33,852 - __main__ - INFO - -------------------------------
+2020-08-02 18:46:33,852 - __main__ - INFO - Dropping table stg_songs.
+
+2020-08-02 18:46:34,693 - __main__ - INFO - Finished dropping table stg_songs.
+
+
+2020-08-02 18:46:34,693 - __main__ - INFO - -------------------------------
+2020-08-02 18:46:34,693 - __main__ - INFO - Dropping table songplays.
+
+2020-08-02 18:46:35,592 - __main__ - INFO - Finished dropping table songplays.
+
+
+2020-08-02 18:46:35,592 - __main__ - INFO - -------------------------------
+2020-08-02 18:46:35,592 - __main__ - INFO - Dropping table users.
+
+2020-08-02 18:46:36,362 - __main__ - INFO - Finished dropping table users.
+
+
+2020-08-02 18:46:36,363 - __main__ - INFO - -------------------------------
+2020-08-02 18:46:36,363 - __main__ - INFO - Dropping table songs.
+
+2020-08-02 18:46:37,234 - __main__ - INFO - Finished dropping table songs.
+
+
+2020-08-02 18:46:37,234 - __main__ - INFO - -------------------------------
+2020-08-02 18:46:37,234 - __main__ - INFO - Dropping table artists.
+
+2020-08-02 18:46:38,046 - __main__ - INFO - Finished dropping table artists.
+
+
+2020-08-02 18:46:38,046 - __main__ - INFO - -------------------------------
+2020-08-02 18:46:38,046 - __main__ - INFO - Dropping table time.
+
+2020-08-02 18:46:38,813 - __main__ - INFO - Finished dropping table time.
+
+
+2020-08-02 18:46:38,813 - __main__ - INFO - Finished dropping tables.
+2020-08-02 18:46:38,814 - __main__ - INFO - -------------------------------
+2020-08-02 18:46:38,814 - __main__ - INFO - Creating table stg_events:
+
+2020-08-02 18:46:39,636 - __main__ - INFO - Finished creating table stg_events.
+
+
+2020-08-02 18:46:39,637 - __main__ - INFO - -------------------------------
+2020-08-02 18:46:39,637 - __main__ - INFO - Creating table stg_songs:
+
+2020-08-02 18:46:40,433 - __main__ - INFO - Finished creating table stg_songs.
+
+
+2020-08-02 18:46:40,433 - __main__ - INFO - -------------------------------
+2020-08-02 18:46:40,433 - __main__ - INFO - Creating table time:
+
+2020-08-02 18:46:41,257 - __main__ - INFO - Finished creating table time.
+
+
+2020-08-02 18:46:41,257 - __main__ - INFO - -------------------------------
+2020-08-02 18:46:41,257 - __main__ - INFO - Creating table artists:
+
+2020-08-02 18:46:42,031 - __main__ - INFO - Finished creating table artists.
+
+
+2020-08-02 18:46:42,032 - __main__ - INFO - -------------------------------
+2020-08-02 18:46:42,032 - __main__ - INFO - Creating table songs:
+
+2020-08-02 18:46:42,970 - __main__ - INFO - Finished creating table songs.
+
+
+2020-08-02 18:46:42,971 - __main__ - INFO - -------------------------------
+2020-08-02 18:46:42,971 - __main__ - INFO - Creating table users:
+
+2020-08-02 18:46:43,885 - __main__ - INFO - Finished creating table users.
+
+
+2020-08-02 18:46:43,885 - __main__ - INFO - -------------------------------
+2020-08-02 18:46:43,885 - __main__ - INFO - Creating table songplays:
+
+2020-08-02 18:46:44,804 - __main__ - INFO - Finished creating table songplays.
+
+
+2020-08-02 18:46:44,805 - __main__ - INFO - Finished creating tables.
+2020-08-02 18:47:00,199 - __main__ - INFO - -------------------------------
+2020-08-02 18:47:00,199 - __main__ - INFO - Copying from S3:
+stg_events
+2020-08-02 18:47:02,621 - __main__ - INFO - Finished copying.
+
+
+2020-08-02 18:47:02,621 - __main__ - INFO - -------------------------------
+2020-08-02 18:47:02,622 - __main__ - INFO - Copying from S3:
+stg_songs
+2020-08-02 20:22:21,085 - __main__ - INFO - Finished copying.
+
+
+2020-08-02 20:22:21,089 - __main__ - INFO - Finished loading staging tables.
+2020-08-02 20:22:21,089 - __main__ - INFO - -------------------------------
+2020-08-02 20:22:21,089 - __main__ - INFO - Starting inserting into time.
+2020-08-02 20:22:22,377 - __main__ - INFO - Finished inserting time.
+
+
+2020-08-02 20:22:22,377 - __main__ - INFO - -------------------------------
+2020-08-02 20:22:22,377 - __main__ - INFO - Starting inserting into artists.
+2020-08-02 20:22:23,561 - __main__ - INFO - Finished inserting artists.
+
+
+2020-08-02 20:22:23,561 - __main__ - INFO - -------------------------------
+2020-08-02 20:22:23,561 - __main__ - INFO - Starting inserting into songs.
+2020-08-02 20:22:30,013 - __main__ - INFO - Finished inserting songs.
+
+
+2020-08-02 20:22:30,014 - __main__ - INFO - -------------------------------
+2020-08-02 20:22:30,014 - __main__ - INFO - Starting inserting into users.
+2020-08-02 20:22:31,343 - __main__ - INFO - Finished inserting users.
+
+
+2020-08-02 20:22:31,344 - __main__ - INFO - -------------------------------
+2020-08-02 20:22:31,344 - __main__ - INFO - Starting inserting into songplays.
+2020-08-02 20:22:37,091 - __main__ - INFO - Finished inserting songplays.
+
+
+2020-08-02 20:22:37,092 - __main__ - INFO - Finished building tables in DWH.
+2020-08-02 20:22:37,693 - __main__ - INFO - ALL DONE!
