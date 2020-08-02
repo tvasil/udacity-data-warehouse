@@ -9,8 +9,8 @@ This project's aim is to create a cloud Data Warehouse for Sparkify, a fictive m
 - What are the most popular times for streaming music through Sparkify?
 
 The DWH data comes from two sources:
-1. Logs of users listening to specific songs on Sparkify (generated data)
-2. Database of song / artist information from
+1. Logs of users listening to specific songs on Sparkify (artificially generated data).
+2. Database of song / artist information from the Million Song Database.
 
 ## How to run
 This ETL process has two steps:
