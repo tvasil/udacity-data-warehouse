@@ -5,12 +5,6 @@ import configparser
 config = configparser.ConfigParser()
 config.read('dwh.cfg')
 
-ARN = config.get('IAM_ROLE', 'ARN')
-LOG_DATA = config.get('S3', 'LOG_DATA')
-LOG_JSONPATH = config.get('S3', 'LOG_JSONPATH')
-# SONG_DATA = config.get('S3', 'SONG_DATA')
-# SONGS_JSONPATH = config.get('S3', 'SONGS_JSONPATH')
-
 # DROP TABLES
 
 staging_events_table_drop = "DROP TABLE IF EXISTS stg_events"
@@ -21,7 +15,7 @@ song_table_drop = "DROP TABLE IF EXISTS songs"
 artist_table_drop = "DROP TABLE IF EXISTS artists"
 time_table_drop = "DROP TABLE IF EXISTS time"
 
-# CREATE TABLES
+# CREATE STAGING TABLES
 
 staging_events_table_create = ("""
 CREATE TABLE IF NOT EXISTS stg_events
@@ -34,7 +28,7 @@ CREATE TABLE IF NOT EXISTS stg_events
     lastName        VARCHAR (255),
     length          DECIMAL,
     level           VARCHAR (20),
-    location        VARCHAR (255),
+    location        VARCHAR (512),
     method          VARCHAR (10),
     page            VARCHAR (255),
     registration    DECIMAL,
@@ -54,7 +48,7 @@ CREATE TABLE IF NOT EXISTS stg_songs
     artist_id       VARCHAR (255),
     artist_latitude DECIMAL,
     artist_longitude DECIMAL,
-    artist_location VARCHAR (255),
+    artist_location VARCHAR (512),
     artist_name     VARCHAR (1024),
     song_id         VARCHAR (255),
     title           VARCHAR (1024),
@@ -62,6 +56,8 @@ CREATE TABLE IF NOT EXISTS stg_songs
     year            SMALLINT
 );
 """)
+
+# CREATE DWH TABLES
 
 songplay_table_create = ("""
 CREATE TABLE IF NOT EXISTS songplays
@@ -85,7 +81,7 @@ CREATE TABLE IF NOT EXISTS users
     first_name      VARCHAR (255),
     last_name       VARCHAR (255)   SORTKEY,
     gender          CHAR(1),
-    level           VARCHAR (255)
+    level           VARCHAR (20)
 )
 DISTSTYLE AUTO;
 """)
@@ -105,9 +101,9 @@ DISTSTYLE AUTO;
 artist_table_create = ("""
 CREATE TABLE IF NOT EXISTS artists
 (
-    id              VARCHAR (255)   NOT NULL PRIMARY KEY SORTKEY,
-    name            VARCHAR (255)   NOT NULL,
-    location        VARCHAR (255),
+    id              VARCHAR (255)    NOT NULL PRIMARY KEY SORTKEY,
+    name            VARCHAR (1024)   NOT NULL,
+    location        VARCHAR (512),
     latitude        DECIMAL,
     longitude       DECIMAL
 )
@@ -122,7 +118,7 @@ CREATE TABLE IF NOT EXISTS time
     day             SMALLINT         NOT NULL,
     week            SMALLINT         NOT NULL,
     month           SMALLINT         NOT NULL,
-    year            SMALLINT         NOT NULL,
+    year            INT              NOT NULL,
     weekday         SMALLINT         NOT NULL
 )
 DISTSTYLE AUTO;
@@ -155,11 +151,19 @@ REGION 'us-west-2';
 
 songplay_table_insert = ("""
 INSERT INTO songplays
+    (start_time,
+     user_id,
+     level,
+     song_id,
+     artist_id,
+     session_id,
+     location,
+     user_agent)
 SELECT
-    e.start_time,
+    timestamp 'epoch' + e.ts * interval '1 second' AS start_time,
     e.userId as user_id,
     e.level,
-    s.song_id,
+    s.id,
     s.artist_id,
     e.sessionId as session_id,
     e.location,
@@ -176,8 +180,13 @@ SELECT DISTINCT
     lastName as last_name,
     gender,
     level
-FROM stg_events
-WHERE page = 'NextSong'
+FROM stg_events m
+WHERE page = 'NextSong' AND
+userId IS NOT NULL AND
+ts = (SELECT MAX(ts)
+      FROM stg_events s
+      WHERE s.userId = m.userId
+    )
 """)
 
 song_table_insert = ("""
@@ -217,6 +226,13 @@ FROM (SELECT DISTINCT
       FROM stg_events
       WHERE page = 'NextSong') ts
 """)
+
+# DATA QUALITY QUERY
+
+data_qual = """
+SELECT COUNT(*)
+FROM songplays
+"""
 
 # QUERY LISTS
 
