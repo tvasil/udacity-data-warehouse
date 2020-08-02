@@ -35,7 +35,7 @@ def drop_tables(cur, conn):
 def create_tables(cur, conn):
     """Executes SQL queries from sql_queries to create needed tables"""
     for query in create_table_queries:
-        table_name = query.split("CREATE TABLE IF NOT EXISTS ")[1]
+        table_name = query.split()[5]
         LOGGER.info("-------------------------------")
         LOGGER.info(f"Creating table {table_name}:\n")
         try:

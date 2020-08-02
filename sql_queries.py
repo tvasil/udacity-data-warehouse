@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS stg_songs
     song_id         VARCHAR (255),
     title           VARCHAR (1024),
     duration        DECIMAL,
-    year            SMALLINT
+    year            INT
 );
 """)
 
@@ -90,9 +90,9 @@ song_table_create = ("""
 CREATE TABLE IF NOT EXISTS songs
 (
     id              VARCHAR (255)   NOT NULL PRIMARY KEY SORTKEY,
-    title           VARCHAR (255)   NOT NULL,
+    title           VARCHAR (1024)   NOT NULL,
     artist_id       VARCHAR         NOT NULL REFERENCES artists(id),
-    year            SMALLINT        NOT NULL,
+    year            INT             NOT NULL,
     duration        DECIMAL         NOT NULL
 )
 DISTSTYLE AUTO;

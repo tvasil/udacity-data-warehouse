@@ -34,14 +34,16 @@ def insert_tables(cur, conn):
     """Executes SQL queries from sql_queries that clean up loaded S3 data and
     inserts the values into the final dim and facts tables"""
     for query in insert_table_queries:
+        table_name = query.split()[2]
         LOGGER.info("-------------------------------")
-        LOGGER.info(f"Starting inserting.")
+        LOGGER.info(f"Starting inserting into {table_name}.")
         try:
             cur.execute(query)
             conn.commit()
         except Exception:
-            LOGGER.exception("Exception occurred while inserting into DWH")
-        LOGGER.info("Finished inserting.\n\n")
+            msg = f"Exception occurred while inserting {table_name} into DWH"
+            LOGGER.exception(msg)
+        LOGGER.info(f"Finished inserting {table_name}.\n\n")
 
 
 def basic_quality_checks(cur, conn):
